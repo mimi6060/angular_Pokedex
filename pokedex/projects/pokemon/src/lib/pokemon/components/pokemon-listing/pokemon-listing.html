@@ -1,13 +1,15 @@
-<h1>Pokédex</h1>
-    <div *ngIf="service.loading()">Loading...</div>
-
-    <ul>
-      <li *ngFor="let p of service.pokemons()">
-        <a [routerLink]="['/pokemons', p.name]">{{ p.name }}</a>
-      </li>
-    </ul>
-
-    <div>
-      <button (click)="prev()" [disabled]="!service.previous()">Previous</button>
-      <button (click)="next()" [disabled]="!service.next()">Next</button>
-    </div>
+<div *ngIf="loading()">Loading...</div>
+<ul *ngIf="!loading() && pagedPokemons.length > 0" style="display: flex; flex-wrap: wrap; gap: 1rem; padding: 0; list-style: none; justify-content: center;">
+  <li *ngFor="let pokemon of pagedPokemons; let i = index" (click)="goToDetail(pokemon.name)" style="cursor:pointer; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 1rem; min-width: 160px; max-width: 200px; flex: 1 1 160px; display: flex; flex-direction: column; align-items: center; transition: box-shadow 0.2s;">
+    <div style="font-weight: bold; font-size: 1.1em; margin-bottom: 0.5rem;">#{{ page() * pageSize + i + 1 }} {{ pokemon.name | titlecase }}</div>
+    <img [src]="getPokemonImageUrl(page() * pageSize + i + 1)" [alt]="pokemon.name" style="width: 96px; height: 96px; object-fit: contain; margin-bottom: 0.5rem;" />
+  </li>
+</ul>
+<div *ngIf="!loading() && pagedPokemons.length === 0">
+  No Pokémon found.
+</div>
+<div *ngIf="!loading() && totalPages > 1" style="display: flex; justify-content: center; align-items: center; gap: 1rem; margin-top: 1rem;">
+  <button (click)="prevPage()" [disabled]="page() === 0">Previous</button>
+  <span>Page {{ page() + 1 }} / {{ totalPages }}</span>
+  <button (click)="nextPage()" [disabled]="page() >= totalPages - 1">Next</button>
+</div>

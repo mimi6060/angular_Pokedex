@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { PokemonListing } from 'pokemon';
+import { PokemonList } from 'pokemon';
 import { PokemonDetail } from 'pokemon';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'pokemons', pathMatch: 'full' },
-    { path: 'pokemons', component: PokemonListing },
+    { path: 'pokemons', component: PokemonList },
     { path: 'pokemons/:id', component: PokemonDetail },
     { path: '**', redirectTo: 'pokemons' }
 ];
