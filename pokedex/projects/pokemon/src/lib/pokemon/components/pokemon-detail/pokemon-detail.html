@@ -1,1 +1,25 @@
-<p>pokemon-detail works!</p>
+
+🖼️ 4. Template HTML pokemon-detail.component.html
+<div *ngIf="loading">Chargement...</div>
+
+<div *ngIf="!loading && pokemon">
+  <h2>{{ pokemon.name | titlecase }}</h2>
+  <img [src]="pokemon.sprites.front_default" alt="{{ pokemon.name }}">
+
+  <p><strong>Poids :</strong> {{ pokemon.weight }}</p>
+  <p><strong>Taille :</strong> {{ pokemon.height }}</p>
+
+  <div>
+    <strong>Types :</strong>
+    <span *ngFor="let t of pokemon.types">{{ t.type.name }} </span>
+  </div>
+
+  <div>
+    <strong>Stats :</strong>
+    <ul>
+      <li *ngFor="let stat of pokemon.stats">
+        {{ stat.stat.name }}: {{ stat.base_stat }}
+      </li>
+    </ul>
+  </div>
+</div>

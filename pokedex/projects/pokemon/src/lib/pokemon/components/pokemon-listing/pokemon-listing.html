@@ -1,1 +1,13 @@
-<p>pokemon-listing works!</p>
+<h1>Pokédex</h1>
+    <div *ngIf="service.loading()">Loading...</div>
+
+    <ul>
+      <li *ngFor="let p of service.pokemons()">
+        <a [routerLink]="['/pokemons', p.name]">{{ p.name }}</a>
+      </li>
+    </ul>
+
+    <div>
+      <button (click)="prev()" [disabled]="!service.previous()">Previous</button>
+      <button (click)="next()" [disabled]="!service.next()">Next</button>
+    </div>
