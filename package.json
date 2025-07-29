@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng build pokemon && ng serve",
-    "build": "ng build",
+    "build": "ng build pokemon && ng build pokedex --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:pokedex": "node dist/pokedex/server/server.mjs"
