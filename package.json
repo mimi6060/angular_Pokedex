@@ -5,7 +5,7 @@
     "ng": "ng",
     "build:lib": "ng build pokemon",
     "watch:lib": "ng build pokemon --watch",
-    "start": "npm run build:lib && concurrently \"npm run watch:lib\" \"ng serve\"",
+    "start": "ng build pokemon && concurrently \"ng build pokemon --watch\" \"ng serve\"",
     "build": "ng build pokemon && ng build pokedex --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
@@ -50,6 +50,7 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "ng-packagr": "^20.1.0",
+    "concurrently": "^9.2.0",
     "typescript": "~5.8.2"
   }
 }
