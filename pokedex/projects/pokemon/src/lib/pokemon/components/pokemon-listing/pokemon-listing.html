@@ -1,15 +1,55 @@
-<div *ngIf="loading()">Loading...</div>
-<ul *ngIf="!loading() && pagedPokemons.length > 0" style="display: flex; flex-wrap: wrap; gap: 1rem; padding: 0; list-style: none; justify-content: center;">
-  <li *ngFor="let pokemon of pagedPokemons; let i = index" (click)="goToDetail(pokemon.name)" style="cursor:pointer; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 1rem; min-width: 160px; max-width: 200px; flex: 1 1 160px; display: flex; flex-direction: column; align-items: center; transition: box-shadow 0.2s;">
-    <div style="font-weight: bold; font-size: 1.1em; margin-bottom: 0.5rem;">#{{ page() * pageSize + i + 1 }} {{ pokemon.name | titlecase }}</div>
-    <img [src]="getPokemonImageUrl(page() * pageSize + i + 1)" [alt]="pokemon.name" style="width: 96px; height: 96px; object-fit: contain; margin-bottom: 0.5rem;" />
-  </li>
-</ul>
-<div *ngIf="!loading() && pagedPokemons.length === 0">
-  No Pokémon found.
+<div class="container">
+  <!-- État de chargement -->
+  @if (pokemonList().loading) {
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Chargement...</span>
+    </div>
+  }
+
+  <!-- Erreur -->
+  @if (pokemonList().error) {
+    <div class="alert alert-danger">
+      {{ pokemonList().error }}
+    </div>
+  }
+
+  <!-- Chargé -->
+  @if (pokemonList().data) {
+    <!-- Pagination -->
+    <div class="d-flex align-items-center justify-content-center gap-3 mt-4">
+      <button
+        class="btn btn-sm btn-outline-primary"
+        [disabled]="offset === 0"
+        (click)="prevPage()">
+        Précédent
+      </button>
+
+      <span>{{ offset + 1 }} - {{ offset + limit > total ? total : offset + limit }}</span>
+      <span class="text-muted"> / {{ total }}</span>
+
+      <button
+        class="btn btn-sm btn-outline-primary"
+        [disabled]="offset + limit >= total"
+        (click)="nextPage()">
+        Suivant
+      </button>
+    </div>
+
+    <!-- Liste -->
+    <div class="row">
+      @for (p of pokemonList().data?.results; track p.name) {
+        <div class="col-md-3" (click)="selectPokemon(p.name)">
+          <div class="card mb-3">
+            @if (getPokemonImg(p.name)) {
+              <img class="card-img-top" [src]="getPokemonImg(p.name)" [alt]="p.name" />
+            }
+            <div class="card-body">
+              <h5 class="card-title">{{ p.name }}</h5>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
 </div>
-<div *ngIf="!loading() && totalPages > 1" style="display: flex; justify-content: center; align-items: center; gap: 1rem; margin-top: 1rem;">
-  <button (click)="prevPage()" [disabled]="page() === 0">Previous</button>
-  <span>Page {{ page() + 1 }} / {{ totalPages }}</span>
-  <button (click)="nextPage()" [disabled]="page() >= totalPages - 1">Next</button>
-</div>
+

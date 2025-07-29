@@ -1,4 +1,35 @@
-<div *ngIf="loading()">Loading...</div>
+<div class="container">
+
+  <!-- État de chargement -->
+  @if (pokemonDetail().loading) {
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Chargement...</span>
+    </div>
+  }
+
+  <!-- Erreur -->
+  @if (pokemonDetail().error) {
+    <div class="alert alert-danger">
+      {{ pokemonDetail().error }}
+    </div>
+  }
+  <!-- Chargé -->
+  @if (pokemonDetail().data) {
+    <div class="row">
+      <div class="col-md-3">
+        <div class="card mb-3">
+          @if (getPokemonImg(pokemonDetail().data?.name!)) {
+            <img class="card-img-top" [src]="getPokemonImg(pokemonDetail().data?.name!)" [alt]="pokemonDetail().data?.name" />
+          }
+          <div class="card-body">
+            <h5 class="card-title">{{ pokemonDetail().data?.name }}</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+<!-- <div *ngIf="loading()">Loading...</div>
 <div *ngIf="!loading() && pokemon()">
   <h2>{{ pokemon().name | titlecase }}</h2>
   <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 1rem;">
@@ -48,4 +79,4 @@
       </ng-container>
     </button>
   </div>
-</div>
+</div> -->

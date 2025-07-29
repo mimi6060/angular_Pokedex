@@ -1,0 +1,5 @@
+/* You can add global styles to this file, and also import other style files */
+@forward "bootstrap/scss/bootstrap" with (
+  $primary: #ff6b6b,
+  $secondary: #4ecdc4
+);
