@@ -11,10 +11,10 @@
     "skipLibCheck": true,
     "isolatedModules": true,
     "experimentalDecorators": true,
+    "baseUrl": ".",  
     "paths": {
-      "pokemon": [
-        "./dist/pokemon"
-      ]
+            "pokemon": ["projects/pokemon/src/public-api.ts"],
+      "pokemon/*": ["projects/pokemon/src/lib/*"]
     },
     "importHelpers": true,
     "target": "ES2022",

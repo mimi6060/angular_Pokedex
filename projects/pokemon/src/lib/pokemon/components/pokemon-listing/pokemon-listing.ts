@@ -1,4 +1,4 @@
-import { CommonModule, TitleCasePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, effect, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { PokemonService } from '../../services/pokemon';
@@ -9,7 +9,7 @@ import { PokemonService } from '../../services/pokemon';
   standalone: true,
   templateUrl: './pokemon-listing.html',
   styleUrl: './pokemon-listing.css',
-  imports: [CommonModule, TitleCasePipe]
+  imports: [CommonModule]
 })
 export class PokemonList {
   private readonly pokemonService = inject(PokemonService);

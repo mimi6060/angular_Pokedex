@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng build pokemon && ng serve",
+    "build:lib": "ng build pokemon",
+    "watch:lib": "ng build pokemon --watch",
+    "start": "npm run build:lib && concurrently \"npm run watch:lib\" \"ng serve\"",
     "build": "ng build pokemon && ng build pokedex --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",

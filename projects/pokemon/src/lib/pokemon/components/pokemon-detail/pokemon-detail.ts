@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { CommonModule, TitleCasePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { PokemonService } from '../../services/pokemon';
+import { PokemonDetailResponse } from '../../models/pokemon';
 
 
 @Component({
@@ -9,26 +10,29 @@ import { PokemonService } from '../../services/pokemon';
   standalone: true,
   templateUrl: './pokemon-detail.html',
   styleUrl: './pokemon-detail.css',
-  imports: [CommonModule, TitleCasePipe, RouterModule]
+  imports: [CommonModule, RouterModule]
 })
 export class PokemonDetail {
   private readonly pokemonService = inject(PokemonService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   readonly pokemonDetail = this.pokemonService.pokemonDetailState;
-  // pokemon = signal<any | null>(null);
-  // loading = signal(true);
-  // pokemonNames = signal<string[]>([]);
-  // currentIndex = signal<number>(-1);
-  // page = signal(0);
-  // pageSize = 10;
-  // spriteIndex = signal(0);
-  // prevNextSprites: { [name: string]: string } = {};
+  pokemon = signal<PokemonDetailResponse | null>(null);
+  loading = signal(true);
 
   constructor() {
     this.route.params.subscribe(params => {
       this.pokemonService.getPokemonDetail(params['name']);
     });
+    
+  }
+
+  ngOnInit() {
+    console.log(this.pokemonDetail().data);
+  }
+
+  getpockemon(){
+    return this.pokemonDetail().data; 
   }
 
   getPokemonImg(name: string) {
