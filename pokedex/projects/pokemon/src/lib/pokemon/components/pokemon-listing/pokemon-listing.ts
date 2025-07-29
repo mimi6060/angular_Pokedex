@@ -7,7 +7,7 @@ import { PokemonService } from '../../services/pokemon';
 
 
 @Component({
-  selector: 'app-pokemon-list',
+  selector: 'lib-pokemon-list',
   standalone: true,
   templateUrl: './pokemon-listing.html',
   styleUrl: './pokemon-listing.css',
@@ -53,7 +53,7 @@ export class PokemonList {
   }
 
   goToDetail(name: string) {
-    this.router.navigate(['/pokemon', name]);
+    this.router.navigate(['/pokemons', name]);
   }
 
   getPokemonImageUrl(num: number) {

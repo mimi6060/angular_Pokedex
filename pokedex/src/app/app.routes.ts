@@ -5,7 +5,7 @@ import { PokemonDetail } from 'pokemon';
 export const routes: Routes = [
     { path: '', redirectTo: 'pokemons', pathMatch: 'full' },
     { path: 'pokemons', component: PokemonList },
-    { path: 'pokemons/:id', component: PokemonDetail },
+    { path: 'pokemons/:name', component: PokemonDetail },
     { path: '**', redirectTo: 'pokemons' }
 ];
 

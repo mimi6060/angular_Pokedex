@@ -6,7 +6,7 @@ import { PokemonService } from '../../services/pokemon';
 
 
 @Component({
-  selector: 'app-pokemon-detail',
+  selector: 'lib-pokemon-detail',
   standalone: true,
   templateUrl: './pokemon-detail.html',
   styleUrl: './pokemon-detail.css',
