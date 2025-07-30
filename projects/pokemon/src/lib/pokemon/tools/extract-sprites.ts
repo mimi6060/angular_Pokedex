@@ -6,6 +6,7 @@ export function extractSprites(sprites: Sprites | undefined): SpriteUrl[] {
   if(!sprites) return [];
   const spritesArray: SpriteUrl[] = [];
 
+  
   // Liste des clés à vérifier avec leur label associé
   const keysWithLabels: { key: keyof Sprites; label: string }[] = [
     { key: 'front_default', label: 'Front' },
@@ -24,6 +25,5 @@ export function extractSprites(sprites: Sprites | undefined): SpriteUrl[] {
       spritesArray.push({ label, url });
     }
   }
-
   return spritesArray;
 }

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, effect, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PokemonService } from '../../services/pokemon';
 import { StatEmojiPipe } from '../../pipes/stat-emoji.pipe';
 
@@ -17,6 +17,7 @@ import { StatEmojiPipe } from '../../pipes/stat-emoji.pipe';
 export class PokemonList {
   private readonly pokemonService = inject(PokemonService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   readonly pokemonList = this.pokemonService.pokemonListState;
   offset = 0;
@@ -32,6 +33,13 @@ export class PokemonList {
         this.pokemonService.fetchAllListDetails();
       }
     });
+    this.route.params.subscribe(params => {
+      const offset = params['offset']; 
+      if (offset) {
+        this.offset = Number(offset);
+      }
+    });
+   
   }
 
   ngOnInit() {
@@ -51,7 +59,7 @@ export class PokemonList {
   }
 
   selectPokemon(name: string) {
-    this.router.navigate(['/pokemons', name]);
+    this.router.navigate(['/pokemonsDetail', name, this.offset]);
   }
 
   getPokemonSummary(name: string) {

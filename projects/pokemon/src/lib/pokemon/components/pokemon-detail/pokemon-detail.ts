@@ -19,6 +19,7 @@ export class PokemonDetail {
   private readonly route = inject(ActivatedRoute);
   spritesArray: SpriteUrl[] = [];
   currentSpriteIndex: number = 0;
+  offset = 0;
 
   readonly pokemonDetail = this.pokemonService.pokemonDetailState;
 
@@ -27,6 +28,10 @@ export class PokemonDetail {
       const name = params['name'];
       if (name) {
         this.pokemonService.getPokemonDetail(name);
+      }
+      const offset = params['offset']; 
+      if (offset) {
+        this.offset = offset;
       }
     });
 
@@ -38,9 +43,9 @@ export class PokemonDetail {
     });
   }
 
-loadSprites(sprites: Sprites | undefined) {
-  this.spritesArray = extractSprites(sprites);
-}
+  loadSprites(sprites: Sprites | undefined) {
+    this.spritesArray = extractSprites(sprites);
+  }
 
   previousPokemon(){
     if( this.currentSpriteIndex >= 1){
