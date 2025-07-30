@@ -2,19 +2,23 @@ import { Component, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { PokemonService } from '../../services/pokemon';
-import { PokemonDetailResponse } from '../../models/pokemon';
+import { PokemonDetailResponse, Sprites, SpriteUrl } from '../../models/pokemon';
+import { StatEmojiPipe } from '../../pipes/stat-emoji.pipe';
+import { extractSprites } from '../../tools/extract-sprites';
 
 @Component({
   selector: 'lib-pokemon-detail',
   standalone: true,
   templateUrl: './pokemon-detail.html',
   styleUrl: './pokemon-detail.css',
-  imports: [CommonModule, RouterModule]
+  imports: [CommonModule, RouterModule,StatEmojiPipe]
 })
 export class PokemonDetail {
   private readonly pokemonService = inject(PokemonService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  spritesArray: SpriteUrl[] = [];
+  currentSpriteIndex: number = 0;
 
   readonly pokemonDetail = this.pokemonService.pokemonDetailState;
 
@@ -29,32 +33,25 @@ export class PokemonDetail {
     effect(() => {
       const detail = this.pokemonDetail();
       if (detail) {
-        console.log('Pokémon reçu :', detail.data);
+        this.loadSprites(detail?.data?.sprites);
       }
     });
   }
 
-  getStatEmoji(statName: string): string {
-    switch (statName.toLowerCase()) {
-      case 'hp': return '❤️';
-      case 'attack': return '⚔️';
-      case 'defense': return '🛡️';
-      case 'speed': return '💨';
-      case 'special-attack': return '🔮';
-      case 'special-defense': return '🧱';
-      default: return '📊';
+loadSprites(sprites: Sprites | undefined) {
+  this.spritesArray = extractSprites(sprites);
+}
+
+  previousPokemon(){
+    if( this.currentSpriteIndex >= 1){
+      this.currentSpriteIndex -= 1;
     }
   }
 
-
-  previousPokemon(){
-
-  }
-
   nextPokemon(){
-    
+    if( this.currentSpriteIndex  < this.spritesArray.length-1){
+      this.currentSpriteIndex += 1;
+    }
   }
-
-
 
 }

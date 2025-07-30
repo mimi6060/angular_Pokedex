@@ -87,3 +87,80 @@
 .type-shadow {
   background-color: #604E82;
 }
+
+
+.card-footer span {
+  /* ... tes autres styles ... */
+  font-weight: 700;               /* texte bien gras */
+  font-size: 1rem;                /* taille lisible et équilibrée */
+  letter-spacing: 1px;            /* espacement entre les lettres */
+  text-transform: capitalize;     /* première lettre en majuscule */
+  font-family: 'Pokemon Solid', 'Arial Black', Arial, sans-serif; /* typo style Pokémon */
+  color: #c41e3a;                 /* rouge vif Pokémon */
+  text-shadow:
+    1px 1px 0 #fff,
+    2px 2px 3px rgba(0, 0, 0, 0.4);  /* ombre claire + ombre portée */
+}
+
+
+
+.type-badge,
+.ability-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-transform: capitalize;
+  color: #fff;
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
+}
+
+/* Abilities : neutre avec contour rouge */
+.ability-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-transform: capitalize;
+  color: white;
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
+}
+
+.ability-overgrow   { background-color: #78C850; }  /* vert - plantes */
+.ability-blaze      { background-color: #F08030; }  /* feu */
+.ability-torrent    { background-color: #6890F0; }  /* eau */
+.ability-shield-dust{ background-color: #A8A878; }
+.ability-static     { background-color: #F8D030; }  /* électrique */
+.ability-levitate   { background-color: #A890F0; }
+.ability-intimidate { background-color: #C03028; }  /* rouge combatif */
+.ability-synchronize{ background-color: #7038F8; }
+.ability-inner-focus{ background-color: #B8A038; }
+.ability-keen-eye   { background-color: #98D8D8; }
+
+.ability-default {
+  background-color: #c41e3a;  /* fallback rouge Pokémon */
+}
+
+.back-button {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 1000;
+}
+
+.pokemon-card {
+  max-width: 400px;
+  width: 100%;
+  margin-top: 60px; /* laisse de la place pour le bouton */
+}
+
+/* Mobile : la carte descend automatiquement car elle est centrée */
+@media (max-width: 600px) {
+  .pokemon-card {
+    margin-top: 80px; /* encore plus de place si besoin */
+  }
+}

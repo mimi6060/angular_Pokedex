@@ -2,6 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component, effect, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { PokemonService } from '../../services/pokemon';
+import { StatEmojiPipe } from '../../pipes/stat-emoji.pipe';
+
+
 
 
 @Component({
@@ -9,20 +12,12 @@ import { PokemonService } from '../../services/pokemon';
   standalone: true,
   templateUrl: './pokemon-listing.html',
   styleUrl: './pokemon-listing.css',
-  imports: [CommonModule]
+  imports: [CommonModule, StatEmojiPipe]
 })
 export class PokemonList {
   private readonly pokemonService = inject(PokemonService);
   private readonly router = inject(Router);
-  private statEmojis = {
-    hp: "❤️",
-    attack: "⚔️",
-    defense: "🛡️",
-  };
 
-
-
-  
   readonly pokemonList = this.pokemonService.pokemonListState;
   offset = 0;
   limit = 20;
@@ -67,16 +62,4 @@ export class PokemonList {
       stats: pokemon?.stats,
     };
   }
-
-    getStatEmoji(statName: string): string {
-      switch (statName.toLowerCase()) {
-        case 'hp': return '❤️';
-        case 'attack': return '⚔️';
-        case 'defense': return '🛡️';
-        case 'speed': return '💨';
-        case 'special-attack': return '🔮';
-        case 'special-defense': return '🧱';
-        default: return '📊';
-      }
-    }
 }

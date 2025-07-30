@@ -44,7 +44,7 @@
               <h5 class="card-title text-center">{{ p.name | titlecase }}</h5>
               <div class="d-flex align-items-center justify-content-center gap-2">
                 @for (s of getPokemonSummary(p.name).stats?.slice(0,3); track s.stat.name) {
-                  <span class="badge text-bg-dark" [title]="s.stat.name">{{ getStatEmoji(s.stat.name) }} {{ s.base_stat }}</span>
+                  <span class="badge text-bg-dark" [title]="s.stat.name">{{ s.stat.name | statEmoji }} {{ s.base_stat }}</span>
                 }
               </div>
             </div>

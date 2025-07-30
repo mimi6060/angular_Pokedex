@@ -1,3 +1,7 @@
+<a href="/pokemons" class="back-button btn btn-outline-secondary">
+  ← Pokémons
+</a>
+
 <div style="height: 100vh; display: flex; justify-content: center; align-items: center;">
   <div class="card w-100" style="max-width: 400px;">
     <!-- Ton contenu ici -->
@@ -6,7 +10,7 @@
       <div class="d-flex justify-content-center gap-2 flex-wrap">
         @for (s of pokemonDetail().data?.stats; track s.stat.name) {
           <span class="badge text-bg-dark" [title]="s.stat.name">
-            {{ getStatEmoji(s.stat.name) }} {{ s.base_stat }}
+            {{s.stat.name | statEmoji }} {{ s.base_stat }}
           </span>
         }
       </div>
@@ -15,33 +19,38 @@
     <div class="position-relative d-flex justify-content-center align-items-center py-3">
       <button
         (click)="previousPokemon()"
+        [disabled]="currentSpriteIndex === 0"
         class="btn btn-outline-primary position-absolute top-50 start-0 translate-middle-y"
-        style="z-index: 10;"
+        style="z-index: 10;margin-left: 10px;"
         aria-label="Pokémon précédent"
-      >
-        ‹
+      ><
       </button>
-
+  
       <img
         class="card-img-top mx-auto"
         style="max-width: 200px;"
-        [src]="pokemonDetail().data?.sprites?.front_default"
+        [src]="spritesArray[currentSpriteIndex].url"
         [alt]="pokemonDetail().data?.name"
       />
 
       <button
         (click)="nextPokemon()"
+        [disabled]="currentSpriteIndex  >= spritesArray.length-1"
         class="btn btn-outline-primary position-absolute top-50 end-0 translate-middle-y"
-        style="z-index: 10;"
+        style="z-index: 10;margin-right: 10px;"
         aria-label="Pokémon suivant"
       >
         ›
       </button>
     </div>
-
     <div class="card-footer d-flex justify-content-center gap-2 flex-wrap">
       @for (t of pokemonDetail().data?.types; track t.slot) {
         <span [ngClass]="'type-' + t.type.name" class="badge rounded-pill">{{ t.type.name }}</span>
+      }
+    </div>
+    <div class="card-footer d-flex justify-content-center gap-2 flex-wrap">
+      @for (a of pokemonDetail().data?.abilities; track a.slot) {
+        <span [ngClass]="'ability-badge ability-' + a.ability.name">{{ a.ability.name }}</span>
       }
     </div>
   </div>
