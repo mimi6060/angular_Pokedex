@@ -2,7 +2,7 @@
   ← Pokémons
 </a>
 
-<div style="height: 100vh; display: flex; justify-content: center; align-items: center;">
+<div class="d-flex justify-content-center align-items-center vh-100">
   <div class="card w-100" style="max-width: 400px;">
     <!-- Ton contenu ici -->
     <div class="card-header text-center">
@@ -20,8 +20,8 @@
       <button
         (click)="previousPokemon()"
         [disabled]="currentSpriteIndex === 0"
-        class="btn btn-outline-primary position-absolute top-50 start-0 translate-middle-y"
-        style="z-index: 10;margin-left: 10px;"
+         class="btn btn-outline-primary position-absolute top-50 start-0 translate-middle-y ms-2"
+          style="z-index: 10;"
         aria-label="Pokémon précédent"
       >‹
       </button>
@@ -36,8 +36,9 @@
       <button
         (click)="nextPokemon()"
         [disabled]="currentSpriteIndex  >= spritesArray.length-1"
-        class="btn btn-outline-primary position-absolute top-50 end-0 translate-middle-y"
-        style="z-index: 10;margin-right: 10px;"
+        class="btn btn-outline-primary position-absolute top-50 end-0 translate-middle-y me-2 position-relative" 
+        style="z-index: 10;"
+    
         aria-label="Pokémon suivant"
       >
         ›
