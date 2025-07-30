@@ -2,7 +2,7 @@ import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Observable, BehaviorSubject, switchMap, of, catchError, tap, forkJoin } from 'rxjs';
-import { LoadingState, PokemonDetailResponse, PokemonListResponse } from '../models/pokemon';
+import { LoadingState, MoveDetailResponse, PokemonDetailResponse, PokemonListResponse, PokemonSpeciesResponse } from '../models/pokemon';
 
 @Injectable({
   providedIn: 'root'
@@ -206,6 +206,154 @@ export class PokemonService {
     return this._pokemonCache().get(name);
   }
 
+
+
+  /*
+    private fetchPokemonSpecieForCache(pokemonName: string){
+    return this.http.get<PokemonDetailResponse>(`https://pokeapi.co/api/v2/pokemon-species/${pokemonName}`).pipe(
+      tap((response) => {
+        if (response) {
+          // Ajoute au cache
+          const cache = new Map(this._pokemonCache());
+          cache.set(pokemonName, response);
+          this._pokemonCache.set(cache);
+        }
+      }),
+      catchError(error => {
+        console.error(`Erreur lors du chargement de ${pokemonName}:`, error);
+        return of(null);
+      })
+    );
+  }*/
+
+     // New methods for Move Details
+  private readonly _moveDetailCache = signal<Map<string, MoveDetailResponse>>(new Map());
+  private readonly _moveDetailTrigger$ = new BehaviorSubject<string | null>(null);
+  
+  readonly moveDetailLoading = signal(false);
+  readonly moveDetailError = signal<string | null>(null);
+
+  private readonly moveDetail$ = this._moveDetailTrigger$.pipe(
+    switchMap(moveName => {
+      if (!moveName) return of(null);
+
+      // Check cache first
+      const cached = this._moveDetailCache().get(moveName);
+      if (cached) {
+        this.moveDetailLoading.set(false);
+        return of(cached);
+      }
+
+      // Otherwise fetch from API
+      return this.fetchMoveDetail(moveName);
+    })
+  );
+
+  readonly moveDetail = toSignal(this.moveDetail$, { initialValue: null });
+
+  readonly moveDetailState = computed<LoadingState<MoveDetailResponse>>(() => ({
+    data: this.moveDetail(),
+    loading: this.moveDetailLoading(),
+    error: this.moveDetailError()
+  }));
+
+  getMoveDetail(moveName: string): void {
+    // Check cache first
+    const cached = this._moveDetailCache().get(moveName);
+    if (cached) {
+      this._moveDetailTrigger$.next(moveName);
+      return;
+    }
+
+    this.moveDetailLoading.set(true);
+    this.moveDetailError.set(null);
+    this._moveDetailTrigger$.next(moveName);
+  }
+
+  private fetchMoveDetail(moveName: string): Observable<MoveDetailResponse | null> {
+    return this.http.get<MoveDetailResponse>(`${this.apiBaseUrl}/move/${moveName}`).pipe(
+      tap((response) => {
+        if (response) {
+          // Add to cache
+          const cache = new Map(this._moveDetailCache());
+          cache.set(moveName, response);
+          this._moveDetailCache.set(cache);
+        }
+        this.moveDetailLoading.set(false);
+      }),
+      catchError(error => {
+        this.moveDetailError.set(error.message || 'Error loading move details');
+        this.moveDetailLoading.set(false);
+        return of(null);
+      })
+    );
+  }
+
+  // New methods for Pokemon Species
+  private readonly _pokemonSpeciesCache = signal<Map<string, PokemonSpeciesResponse>>(new Map());
+  private readonly _pokemonSpeciesTrigger$ = new BehaviorSubject<string | null>(null);
+  
+  readonly pokemonSpeciesLoading = signal(false);
+  readonly pokemonSpeciesError = signal<string | null>(null);
+
+  private readonly pokemonSpecies$ = this._pokemonSpeciesTrigger$.pipe(
+    switchMap(pokemonName => {
+      if (!pokemonName) return of(null);
+
+      // Check cache first
+      const cached = this._pokemonSpeciesCache().get(pokemonName);
+      if (cached) {
+        this.pokemonSpeciesLoading.set(false);
+        return of(cached);
+      }
+
+      // Otherwise fetch from API
+      return this.fetchPokemonSpecies(pokemonName);
+    })
+  );
+
+  readonly pokemonSpecies = toSignal(this.pokemonSpecies$, { initialValue: null });
+
+  readonly pokemonSpeciesState = computed<LoadingState<PokemonSpeciesResponse>>(() => ({
+    data: this.pokemonSpecies(),
+    loading: this.pokemonSpeciesLoading(),
+    error: this.pokemonSpeciesError()
+  }));
+
+  getPokemonSpecies(pokemonName: string): void {
+    // Check cache first
+    const cached = this._pokemonSpeciesCache().get(pokemonName);
+    if (cached) {
+      this._pokemonSpeciesTrigger$.next(pokemonName);
+      return;
+    }
+
+    this.pokemonSpeciesLoading.set(true);
+    this.pokemonSpeciesError.set(null);
+    this._pokemonSpeciesTrigger$.next(pokemonName);
+  }
+
+  private fetchPokemonSpecies(pokemonName: string): Observable<PokemonSpeciesResponse | null> {
+    return this.http.get<PokemonSpeciesResponse>(`${this.apiBaseUrl}/pokemon-species/${pokemonName}`).pipe(
+      tap((response) => {
+        if (response) {
+          // Add to cache
+          const cache = new Map(this._pokemonSpeciesCache());
+          cache.set(pokemonName, response);
+          this._pokemonSpeciesCache.set(cache);
+        }
+        this.pokemonSpeciesLoading.set(false);
+      }),
+      catchError(error => {
+        this.pokemonSpeciesError.set(error.message || 'Error loading Pokemon species');
+        this.pokemonSpeciesLoading.set(false);
+        return of(null);
+      })
+    );
+  }
+
+
+  
   // Méthode utilitaire pour réinitialiser les états
   resetStates(): void {
     this._currentPokemonId.set(null);
@@ -214,4 +362,5 @@ export class PokemonService {
     this.pokemonListError.set(null);
     this._listPokemonDetails.set([]);
   }
+  
 }

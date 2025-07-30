@@ -1,0 +1,107 @@
+<div class="d-flex justify-content-center align-items-center vh-100">
+  @if (loading()) {
+    <div class="card w-100" style="max-width: 80%;">
+      <div class="card-body text-center">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading move details...</span>
+        </div>
+        <p class="mt-3 text-muted">Loading move details...</p>
+      </div>
+    </div>
+  } @else if (error()) {
+    <div class="card w-100" style="max-width: 80%;">
+      <div class="card-body text-center">
+        <div class="alert alert-danger" role="alert">
+          <h4 class="alert-heading">Error!</h4>
+          <p>{{ error() }}</p>
+        </div>
+      </div>
+    </div>
+  } @else if (moveDetail()) {
+    <div class="card w-100" style="max-width: 80%;">
+      <!-- Move Header -->
+      <div class="card-header text-center position-relative">
+        <button 
+          (click)="goBack()" 
+          class="back-button btn btn-outline-secondary position-absolute"
+          aria-label="Go back"
+        >
+          ← Back
+        </button>
+        <h5 class="card-title">{{ formatMoveName(moveDetail()!.name) }}</h5>
+        <div class="d-flex justify-content-center gap-2 flex-wrap">
+          <span 
+            class="badge rounded-pill" 
+            [style.background-color]="getTypeColor(moveDetail()!.type.name)"
+            style="color: white;"
+          >
+            {{ moveDetail()!.type.name | titlecase }}
+          </span>
+          <span class="badge rounded-pill bg-secondary">
+            {{ getDamageClassIcon(moveDetail()!.damage_class.name) }}
+            {{ moveDetail()!.damage_class.name | titlecase }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Move Stats -->
+      <div class="card-body">
+        <div class="row g-2 mb-3">
+          <div class="col-6">
+            <div class="text-center p-2 border rounded">
+              <small class="text-muted d-block">Power</small>
+              <strong>{{ moveDetail()!.power || '—' }}</strong>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="text-center p-2 border rounded">
+              <small class="text-muted d-block">Accuracy</small>
+              <strong>{{ moveDetail()!.accuracy ? moveDetail()!.accuracy + '%' : '—' }}</strong>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row g-2 mb-3">
+          <div class="col-6">
+            <div class="text-center p-2 border rounded">
+              <small class="text-muted d-block">PP</small>
+              <strong>{{ moveDetail()!.pp }}</strong>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="text-center p-2 border rounded">
+              <small class="text-muted d-block">Priority</small>
+              <strong>{{ moveDetail()!.priority > 0 ? '+' + moveDetail()!.priority : moveDetail()!.priority }}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Move Description -->
+      @if (getEnglishFlavorText() || getEnglishEffect()) {
+        <div class="card-body border-top">
+          <h6 class="card-subtitle mb-3 text-muted">Description</h6>
+          @if (getEnglishFlavorText()) {
+            <p class="mb-3" style="font-style: italic;">{{ getEnglishFlavorText() }}</p>
+          }
+          @if (getEnglishEffect()) {
+            <div>
+              <small class="text-muted d-block mb-1">Effect:</small>
+              <p class="mb-0" style="font-size: 0.9rem;">{{ getEnglishEffect() }}</p>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Move Details -->
+      <div class="card-footer d-flex justify-content-center gap-2 flex-wrap">
+        <span class="badge bg-light text-dark">
+          Target: {{ moveDetail()!.target.name.replace('-', ' ') | titlecase }}
+        </span>
+        <span class="badge bg-light text-dark">
+          {{ moveDetail()!.generation.name.replace('-', ' ') | titlecase }}
+        </span>
+      </div>
+    </div>
+  }
+</div>

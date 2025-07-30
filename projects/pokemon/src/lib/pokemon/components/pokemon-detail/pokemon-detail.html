@@ -1,11 +1,9 @@
-<a [routerLink]="['/pokemons', offset]"class="back-button btn btn-outline-secondary">
-  ← Pokémons
-</a>
-
-<div class="d-flex justify-content-center align-items-center vh-100">
-  <div class="card w-100" style="max-width: 400px;">
-    <!-- Ton contenu ici -->
-    <div class="card-header text-center">
+<div class="d-flex justify-content-center align-items-center min-vh-100">
+  <div class="card w-100 responsive-card">
+    <div class="card-header text-center position-relative">
+      <a [routerLink]="['/pokemons', offset]" class="back-button btn btn-outline-secondary position-absolute">
+      ← Pokémons
+      </a>
       <h5 class="card-title">{{ pokemonDetail().data?.name | titlecase }}  {{pokemonDetail().data?.id}}</h5>
       <div class="d-flex justify-content-center gap-2 flex-wrap">
         @for (s of pokemonDetail().data?.stats; track s.stat.name) {
@@ -16,34 +14,76 @@
       </div>
     </div>
 
-    <div class="position-relative d-flex justify-content-center align-items-center py-3">
-      <button
-        (click)="previousPokemon()"
-        [disabled]="currentSpriteIndex === 0"
-         class="btn btn-outline-primary position-absolute top-50 start-0 translate-middle-y ms-2"
-          style="z-index: 10;"
-        aria-label="Pokémon précédent"
-      >‹
-      </button>
-  
-      <img
-        class="card-img-top mx-auto"
-        style="max-width: 200px;"
-        [src]="spritesArray[currentSpriteIndex].url"
-        [alt]="pokemonDetail().data?.name"
-      />
+   <!-- Sprites and Description Section -->
+    <div class="row g-0">
+      <!-- Sprites Column -->
+      <div class="col-lg-6 col-md-6 col-12">
+        <div class="card-body h-100 d-flex flex-column justify-content-center">
+          <div class="d-flex justify-content-center align-items-center py-3 sprites-container">
+            <button
+              (click)="previousPokemon()"
+              [disabled]="currentSpriteIndex === 0"
+               class="btn btn-outline-primary sprite-nav-btn"
+              aria-label="Pokémon précédent"
+            >‹
+            </button>
+            <div class="sprite-container">
+              <img
+                class="card-img-top mx-auto"
+                style="max-width: 200px;"
+                [src]="spritesArray[currentSpriteIndex].url"
+                [alt]="pokemonDetail().data?.name"
+              />
+            </div>
 
-      <button
-        (click)="nextPokemon()"
-        [disabled]="currentSpriteIndex  >= spritesArray.length-1"
-        class="btn btn-outline-primary position-absolute top-50 end-0 translate-middle-y me-2 position-relative" 
-        style="z-index: 10;"
-    
-        aria-label="Pokémon suivant"
-      >
-        ›
-      </button>
+            <button
+              (click)="nextPokemon()"
+              [disabled]="currentSpriteIndex  >= spritesArray.length-1"
+              class="btn btn-outline-primary sprite-nav-btn" 
+              aria-label="Pokémon suivant"
+            >
+              ›
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Description Column -->
+      <div class="col-lg-6 col-md-6 col-12">
+        @if (getCurrentDescription()) {
+          <div class="card-body h-100 d-flex flex-column justify-content-center">
+           
+            <div class="d-flex justify-content-center align-items-center py-3 description-container">
+              <button
+                (click)="previousDescription()"
+                [disabled]="getTotalDescriptions() <= 1"
+                class="btn btn-outline-primary desc-nav-btn"
+                aria-label="Previous description"
+              >‹
+              </button>
+
+              <div class="description-content flex-grow-1 mx-2">
+                <div class="p-3 bg-light rounded">
+                  <p class="mb-2 fw-normal">{{ getCurrentDescription()?.text }}</p>
+                  <small class="text-muted">
+                    <strong><i class="fas fa-gamepad me-1"></i>Source:</strong> {{ getCurrentDescription()?.version }}
+                  </small>
+                </div>
+              </div>
+
+              <button
+                (click)="nextDescription()"
+                [disabled]="getTotalDescriptions() <= 1"
+                class="btn btn-outline-primary desc-nav-btn"
+                aria-label="Next description"
+              >›
+              </button>
+            </div>
+          </div>
+        }
+      </div>
     </div>
+    
     <div class="card-footer d-flex justify-content-center gap-2 flex-wrap">
       @for (t of pokemonDetail().data?.types; track t.slot) {
         <span [ngClass]="'ability-badge type-' + t.type.name" class="badge rounded-pill">{{ t.type.name }}</span>
@@ -52,6 +92,73 @@
     <div class="card-footer d-flex justify-content-center gap-2 flex-wrap">
       @for (a of pokemonDetail().data?.abilities; track a.slot) {
         <span [ngClass]="'ability-badge ability-' + a.ability.name" class="badge rounded-pill">{{ a.ability.name }}</span>
+      }
+    </div>
+
+
+    <!-- Moves Section -->
+    <div class="card-body">      
+      @if (getAllMoves().length > 0) {
+        <div class="position-relative">
+          <button
+            (click)="previousMovePage()"
+            [disabled]="currentMovePageIndex === 0"
+            class="btn btn-outline-primary position-absolute top-50 start-0 translate-middle-y"
+            style="z-index: 10;"
+            aria-label="Previous moves page"
+          >‹
+          </button>
+
+          <div class="mx-3">
+            <div class="row g-1">
+              @for (move of getCurrentPageMoves(); track move.move.name) {
+                <div class="col-6">
+                  <div 
+                    class="move-item p-1 border rounded text-center clickable-move" 
+                    (click)="navigateToMove(move.move.name)"
+                    role="button"
+                    tabindex="0"
+                    (keydown.enter)="navigateToMove(move.move.name)"
+                    (keydown.space)="navigateToMove(move.move.name)"
+                  >
+                    <div class="move-name text-capitalize fw-bold">
+                      {{ move.move.name.replace('-', ' ') }}
+                    </div>
+                    <div class="move-method text-muted">
+                      @if (move.type === 'level-up') {
+                        <span class="badge bg-success">{{ move.method }}</span>
+                      } @else {
+                        <span class="badge bg-secondary">{{ move.method.replace('-', ' ') }}</span>
+                      }
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+            
+            <div class="text-center mt-3">
+              <small class="text-muted">
+                Page {{ currentMovePageIndex + 1 }} / {{ getTotalMovePages() }}
+              </small>
+              <small class="text-muted">
+                 for {{ getAllMoves().length }} moves
+              </small>
+            </div>
+          </div>
+
+          <button
+            (click)="nextMovePage()"
+            [disabled]="currentMovePageIndex >= getTotalMovePages() - 1"
+            class="btn btn-outline-primary position-absolute top-50 end-0 translate-middle-y"
+            style="z-index: 10;"
+            aria-label="Next moves page"
+          >›
+          </button>
+        </div>
+      } @else {
+        <div class="text-center text-muted">
+          <p>No moves available for this Pokémon.</p>
+        </div>
       }
     </div>
   </div>

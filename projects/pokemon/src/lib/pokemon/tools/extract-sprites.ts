@@ -6,6 +6,13 @@ export function extractSprites(sprites: Sprites | undefined): SpriteUrl[] {
   if(!sprites) return [];
   const spritesArray: SpriteUrl[] = [];
 
+  // Ajouter d'abord l'artwork officiel (même que dans la liste)
+  if (sprites.other?.['official-artwork']?.front_default) {
+    spritesArray.push({
+      label: 'Official Artwork',
+      url: sprites.other['official-artwork'].front_default
+    });
+  }
   
   // Liste des clés à vérifier avec leur label associé
   const keysWithLabels: { key: keyof Sprites; label: string }[] = [

@@ -165,3 +165,12 @@
     margin-top: 80px; /* encore plus de place si besoin */
   }
 }
+
+
+.back-button {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 1000;
+}
+
