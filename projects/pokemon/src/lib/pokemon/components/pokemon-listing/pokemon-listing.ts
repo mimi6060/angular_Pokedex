@@ -64,6 +64,28 @@ export class PokemonList {
     }
   }
 
+  getCurrentPage(): number {
+    return Math.floor(this.offset / this.limit) + 1;
+  }
+
+  getTotalPages(): number {
+    return Math.ceil(this.total / this.limit);
+  }
+
+  goToPage(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const pageNumber = parseInt(target.value, 10);
+    
+    if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= this.getTotalPages()) {
+      this.offset = (pageNumber - 1) * this.limit;
+      this.pokemonService.getPokemonList(this.limit, this.offset);
+      const currentRoute = this.route.snapshot.parent?.url[0]?.path || 'pokemons';
+      this.router.navigate([`/${currentRoute}`, this.offset]);
+    } else {
+      // Reset to current page if invalid input
+      target.value = this.getCurrentPage().toString();
+    }
+  }
 
   selectPokemon(name: string) {
     this.router.navigate(['/details', name, this.offset]);
