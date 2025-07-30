@@ -1,82 +1,48 @@
-<div class="container">
-
-  <!-- État de chargement -->
-  @if (pokemonDetail().loading) {
-    <div class="spinner-border" role="status">
-      <span class="visually-hidden">Chargement...</span>
-    </div>
-  }
-
-  <!-- Erreur -->
-  @if (pokemonDetail().error) {
-    <div class="alert alert-danger">
-      {{ pokemonDetail().error }}
-    </div>
-  }
-  <!-- Chargé -->
-  @if (pokemonDetail().data) {
-    <div class="row">
-      <div class="col-md-3">
-        <div class="card mb-3">
-          @if (getPokemonImg(pokemonDetail().data?.name!)) {
-            <img class="card-img-top" [src]="getPokemonImg(pokemonDetail().data?.name!)" [alt]="pokemonDetail().data?.name" />
-          }
-          <div class="card-body">
-            <h5 class="card-title">{{ pokemonDetail().data?.name }}</h5>
-          </div>
-        </div>
+<div style="height: 100vh; display: flex; justify-content: center; align-items: center;">
+  <div class="card w-100" style="max-width: 400px;">
+    <!-- Ton contenu ici -->
+    <div class="card-header text-center">
+      <h5 class="card-title">{{ pokemonDetail().data?.name | titlecase }}</h5>
+      <div class="d-flex justify-content-center gap-2 flex-wrap">
+        @for (s of pokemonDetail().data?.stats; track s.stat.name) {
+          <span class="badge text-bg-dark" [title]="s.stat.name">
+            {{ getStatEmoji(s.stat.name) }} {{ s.base_stat }}
+          </span>
+        }
       </div>
     </div>
-  }
 
-<!-- <div *ngIf="loading()">Loading...</div>
-<div *ngIf="!loading() && pokemon()">
-  <h2>{{ pokemon().name | titlecase }}</h2>
-  <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 1rem;">
-    <div style="display: flex; align-items: center; gap: 1rem;">
-      <button (click)="prevSprite()" [disabled]="spriteIndex() === 0">&#8592;</button>
-      <div *ngIf="allSprites.length">
-        <img [src]="allSprites[spriteIndex()].url" [alt]="allSprites[spriteIndex()].label" style="max-width: 200px; max-height: 200px;" />
-        <div style="text-align: center; font-size: 0.9em; color: #555;">{{ allSprites[spriteIndex()].label }}</div>
-      </div>
-      <button (click)="nextSprite()" [disabled]="spriteIndex() >= allSprites.length - 1">&#8594;</button>
+    <div class="position-relative d-flex justify-content-center align-items-center py-3">
+      <button
+        (click)="previousPokemon()"
+        class="btn btn-outline-primary position-absolute top-50 start-0 translate-middle-y"
+        style="z-index: 10;"
+        aria-label="Pokémon précédent"
+      >
+        ‹
+      </button>
+
+      <img
+        class="card-img-top mx-auto"
+        style="max-width: 200px;"
+        [src]="pokemonDetail().data?.sprites?.front_default"
+        [alt]="pokemonDetail().data?.name"
+      />
+
+      <button
+        (click)="nextPokemon()"
+        class="btn btn-outline-primary position-absolute top-50 end-0 translate-middle-y"
+        style="z-index: 10;"
+        aria-label="Pokémon suivant"
+      >
+        ›
+      </button>
     </div>
-    <div *ngIf="allSprites.length > 1" style="margin-top: 0.5rem; font-size: 0.85em; color: #888;">
-      Sprite {{ spriteIndex() + 1 }} / {{ allSprites.length }}
-    </div>
-  </div>
-  <div>
-    <strong>Types:</strong>
-    <span *ngFor="let t of pokemon().types; let last = last">
-      {{ t.type.name | titlecase }}<span *ngIf="!last">, </span>
-    </span>
-  </div>
-  <div>
-    <strong>Attacks (Moves):</strong>
-    <ul>
-      <li *ngFor="let move of pagedMoves">
-        <a [routerLink]="['/move', move.move.name]" [queryParams]="{ pokemon: pokemon().name }" style="cursor:pointer">{{ move.move.name }}</a>
-      </li>
-    </ul>
-    <div style="display: flex; gap: 1rem; align-items: center;">
-      <button (click)="prevPage()" [disabled]="page() === 0">Previous</button>
-      <span>Page {{ page() + 1 }} / {{ totalPages }}</span>
-      <button (click)="nextPage()" [disabled]="page() >= totalPages - 1">Next</button>
+
+    <div class="card-footer d-flex justify-content-center gap-2 flex-wrap">
+      @for (t of pokemonDetail().data?.types; track t.slot) {
+        <span [ngClass]="'type-' + t.type.name" class="badge rounded-pill">{{ t.type.name }}</span>
+      }
     </div>
   </div>
-  <div>
-    <button *ngIf="hasPrevious()" (click)="goToPrevious()" style="display: flex; align-items: center; gap: 0.5rem;">
-      <ng-container *ngIf="pokemonNames().length && currentIndex() > 0">
-        <img [src]="getPrevSprite()" alt="Prev Sprite" style="width: 40px; height: 40px; object-fit: contain; background: #eee; border-radius: 50%;" />
-        #{{ currentIndex() }} {{ pokemonNames()[currentIndex() - 1] | titlecase }}
-      </ng-container>
-    </button>
-    <button (click)="goBack()">Back to List</button>
-    <button *ngIf="hasNext()" (click)="goToNext()" style="display: flex; align-items: center; gap: 0.5rem;">
-      <ng-container *ngIf="pokemonNames().length && currentIndex() < pokemonNames().length - 1">
-        #{{ currentIndex() + 2 }} {{ pokemonNames()[currentIndex() + 1] | titlecase }}
-        <img [src]="getNextSprite()" alt="Next Sprite" style="width: 40px; height: 40px; object-fit: contain; background: #eee; border-radius: 50%;" />
-      </ng-container>
-    </button>
-  </div>
-</div> -->
+</div>

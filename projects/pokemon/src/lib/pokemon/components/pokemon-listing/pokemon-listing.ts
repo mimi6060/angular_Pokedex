@@ -19,6 +19,10 @@ export class PokemonList {
     attack: "⚔️",
     defense: "🛡️",
   };
+
+
+
+  
   readonly pokemonList = this.pokemonService.pokemonListState;
   offset = 0;
   limit = 20;
@@ -64,10 +68,15 @@ export class PokemonList {
     };
   }
 
-  getStatEmoji(statName: keyof typeof this.statEmojis | string) {
-    if (statName in this.statEmojis) {
-      return this.statEmojis[<keyof typeof this.statEmojis>statName];
+    getStatEmoji(statName: string): string {
+      switch (statName.toLowerCase()) {
+        case 'hp': return '❤️';
+        case 'attack': return '⚔️';
+        case 'defense': return '🛡️';
+        case 'speed': return '💨';
+        case 'special-attack': return '🔮';
+        case 'special-defense': return '🧱';
+        default: return '📊';
+      }
     }
-    return "❔";
-  }
 }
