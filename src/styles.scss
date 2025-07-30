@@ -103,7 +103,6 @@
 }
 
 
-
 .type-badge,
 .ability-badge {
   display: inline-block;
@@ -113,7 +112,9 @@
   font-size: 0.9rem;
   text-transform: capitalize;
   color: #fff;
-  box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    text-shadow:
+    1px 1px 0 #fff,
+    2px 2px 3px rgba(0, 0, 0, 0.4); 
   transition: transform 0.2s;
 }
 

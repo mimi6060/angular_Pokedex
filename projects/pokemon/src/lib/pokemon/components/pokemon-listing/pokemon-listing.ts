@@ -50,11 +50,8 @@ export class PokemonList {
     this.offset = Math.max(0, this.offset - this.limit);
     this.pokemonService.getPokemonList(this.limit, this.offset);
     if (this.offset >= 0) {
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParams: { offset: this.offset },
-        queryParamsHandling: 'merge'
-      });
+       const currentRoute = this.route.snapshot.parent?.url[0]?.path || 'pokemons';
+      this.router.navigate([`/${currentRoute}`, this.offset]);
     }
   }
 
@@ -62,16 +59,14 @@ export class PokemonList {
     if (this.offset + this.limit < this.total) {
       this.offset += this.limit;
       this.pokemonService.getPokemonList(this.limit, this.offset);
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParams: { offset: this.offset },
-        queryParamsHandling: 'merge'
-      });
+      const currentRoute = this.route.snapshot.parent?.url[0]?.path || 'pokemons';
+      this.router.navigate([`/${currentRoute}`, this.offset]);
     }
   }
 
+
   selectPokemon(name: string) {
-    this.router.navigate(['/customer', name, this.offset]);
+    this.router.navigate(['/details', name, this.offset]);
   }
 
   getPokemonSummary(name: string) {

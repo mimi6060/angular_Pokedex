@@ -6,8 +6,8 @@ export const routes: Routes = [
     { path: '', component: PokemonList},
     { path: 'pokemons', component: PokemonList },
     { path: 'pokemons/:offset', component: PokemonList },
-    { path: 'customer/:name', component: PokemonDetail },
-    { path: 'customer/:name/:offset', component: PokemonDetail },
+    { path: 'details/:name', component: PokemonDetail },
+    { path: 'details/:name/:offset', component: PokemonDetail },
     { path: '**', redirectTo: 'pokemons' }
 ];
 

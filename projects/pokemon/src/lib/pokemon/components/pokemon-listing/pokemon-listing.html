@@ -21,7 +21,7 @@
         class="btn btn-sm btn-outline-primary"
         [disabled]="offset === 0"
         (click)="prevPage()">
-        Précédent
+        ‹
       </button>
 
       <span>{{ offset + 1 }} - {{ offset + limit > total ? total : offset + limit }}</span>
@@ -31,7 +31,7 @@
         class="btn btn-sm btn-outline-primary"
         [disabled]="offset + limit >= total"
         (click)="nextPage()">
-        Suivant
+        ›
       </button>
     </div>
 

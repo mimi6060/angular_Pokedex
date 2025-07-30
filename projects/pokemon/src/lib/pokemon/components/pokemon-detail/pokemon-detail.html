@@ -6,7 +6,7 @@
   <div class="card w-100" style="max-width: 400px;">
     <!-- Ton contenu ici -->
     <div class="card-header text-center">
-      <h5 class="card-title">{{ pokemonDetail().data?.name | titlecase }}</h5>
+      <h5 class="card-title">{{ pokemonDetail().data?.name | titlecase }}  {{pokemonDetail().data?.id}}</h5>
       <div class="d-flex justify-content-center gap-2 flex-wrap">
         @for (s of pokemonDetail().data?.stats; track s.stat.name) {
           <span class="badge text-bg-dark" [title]="s.stat.name">
@@ -23,7 +23,7 @@
         class="btn btn-outline-primary position-absolute top-50 start-0 translate-middle-y"
         style="z-index: 10;margin-left: 10px;"
         aria-label="Pokémon précédent"
-      ><
+      >‹
       </button>
   
       <img
@@ -45,12 +45,12 @@
     </div>
     <div class="card-footer d-flex justify-content-center gap-2 flex-wrap">
       @for (t of pokemonDetail().data?.types; track t.slot) {
-        <span [ngClass]="'type-' + t.type.name" class="badge rounded-pill">{{ t.type.name }}</span>
+        <span [ngClass]="'ability-badge type-' + t.type.name" class="badge rounded-pill">{{ t.type.name }}</span>
       }
     </div>
     <div class="card-footer d-flex justify-content-center gap-2 flex-wrap">
       @for (a of pokemonDetail().data?.abilities; track a.slot) {
-        <span [ngClass]="'ability-badge ability-' + a.ability.name">{{ a.ability.name }}</span>
+        <span [ngClass]="'ability-badge ability-' + a.ability.name" class="badge rounded-pill">{{ a.ability.name }}</span>
       }
     </div>
   </div>
