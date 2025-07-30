@@ -16,7 +16,7 @@
   <!-- Chargé -->
   @if (pokemonList().data) {
     <!-- Pagination -->
-    <div class="d-flex align-items-center justify-content-center gap-3 mt-4">
+    <div class="d-flex align-items-center justify-content-center gap-3 my-4">
       <button
         class="btn btn-sm btn-outline-primary"
         [disabled]="offset === 0"
@@ -40,11 +40,19 @@
       @for (p of pokemonList().data?.results; track p.name) {
         <div class="col-md-3" (click)="selectPokemon(p.name)">
           <div class="card mb-3">
-            @if (getPokemonImg(p.name)) {
-              <img class="card-img-top" [src]="getPokemonImg(p.name)" [alt]="p.name" />
-            }
-            <div class="card-body">
-              <h5 class="card-title">{{ p.name }}</h5>
+            <div class="card-header">
+              <h5 class="card-title text-center">{{ p.name | titlecase }}</h5>
+              <div class="d-flex align-items-center justify-content-center gap-2">
+                @for (s of getPokemonSummary(p.name).stats?.slice(0,3); track s.stat.name) {
+                  <span class="badge text-bg-dark" [title]="s.stat.name">{{ getStatEmoji(s.stat.name) }} {{ s.base_stat }}</span>
+                }
+              </div>
+            </div>
+            <img class="card-img-top" [src]="getPokemonSummary(p.name).img" [alt]="p.name" />
+            <div class="card-footer d-flex align-items-center justify-content-center gap-2">
+              @for (t of getPokemonSummary(p.name).types; track t.slot) {
+                <span [ngClass]="'type-' + t.type.name" class="badge rounded-pill">{{ t.type.name }}</span>
+              }
             </div>
           </div>
         </div>

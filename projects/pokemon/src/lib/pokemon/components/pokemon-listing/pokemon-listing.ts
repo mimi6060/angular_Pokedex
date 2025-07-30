@@ -14,6 +14,11 @@ import { PokemonService } from '../../services/pokemon';
 export class PokemonList {
   private readonly pokemonService = inject(PokemonService);
   private readonly router = inject(Router);
+  private statEmojis = {
+    hp: "❤️",
+    attack: "⚔️",
+    defense: "🛡️",
+  };
   readonly pokemonList = this.pokemonService.pokemonListState;
   offset = 0;
   limit = 20;
@@ -50,7 +55,19 @@ export class PokemonList {
     this.router.navigate(['/pokemons', name]);
   }
 
-  getPokemonImg(name: string) {
-    return this.pokemonService.getPokemonFromCache(name)?.sprites.front_default;
+  getPokemonSummary(name: string) {
+    const pokemon = this.pokemonService.getPokemonFromCache(name);
+    return {
+      img: pokemon?.sprites.other['official-artwork'].front_default,
+      types: pokemon?.types,
+      stats: pokemon?.stats,
+    };
+  }
+
+  getStatEmoji(statName: keyof typeof this.statEmojis | string) {
+    if (statName in this.statEmojis) {
+      return this.statEmojis[<keyof typeof this.statEmojis>statName];
+    }
+    return "❔";
   }
 }
